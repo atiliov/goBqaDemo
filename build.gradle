@@ -1,0 +1,122 @@
+group 'goBqa'
+version '1.0-SNAPSHOT'
+
+apply plugin: 'java'
+apply plugin: 'idea'
+sourceCompatibility = 1.8
+
+idea {
+    project {
+        //if you want to set specific jdk and language level
+        jdkName = '1.8'
+        languageLevel = '1.8'
+    }
+}
+repositories {
+    mavenCentral()
+}
+
+task wrapper(type: Wrapper) {
+    gradleVersion = '2.5'
+}
+
+dependencies {
+    // Maven coordinates for items in central Maven
+    testCompile group: 'junit', name: 'junit', version: '4.11'
+    testCompile 'org.testng:testng:6.9.4'
+    testCompile 'org.apache.poi:poi:3.13'
+    testCompile 'org.apache.poi:poi-ooxml:3.13'
+    testCompile 'org.apache.poi:openxml4j:1.0-beta'
+    testCompile 'org.apache.ant:ant:1.9.2'
+    testCompile 'org.slf4j:slf4j-api:1.7.2'
+    testCompile 'org.slf4j:slf4j-log4j12:1.7.2'
+    testCompile 'xmlunit:xmlunit:1.5'
+    //testCompile 'org.gradle:gradle-core:2.2'
+
+    // Selenium Deps
+    testCompile 'org.seleniumhq.selenium:selenium-java:2.47.1'
+    testCompile 'org.seleniumhq.selenium:selenium-chrome-driver:2.47.1'
+    testCompile 'io.appium:java-client:1.6.1'
+
+    // Libraries local to the project
+    testCompile files('lib/seleniumutils-2.1.jar')
+    testCompile files('FmwkLib/GoBqa.jar')
+
+    // libraries to manage JSON integration
+    testCompile 'com.googlecode.json-simple:json-simple:1.1'
+    testCompile group: 'com.mashape.unirest', name: 'unirest-java', version: '1.4.7'
+    testCompile group: 'org.apache.httpcomponents', name: 'httpclient', version: '4.3.6'
+    //testCompile group: 'org.apache.httpcomponents', name: 'httpsyncclient', version: '4.0.2'
+    //testCompile group: 'org.apache.httpcomponents', name: 'httpmine', version: '4.3.6'
+    testCompile 'org.apache.httpcomponents:httpmime:4.3.6'
+    testCompile 'org.apache.httpcomponents:httpasyncclient:4.0.2'
+    testCompile group: 'org.json', name: 'json', version: '20140107'
+
+
+}
+
+
+configurations {
+    all*.exclude group: "xercesImpl"
+    all*.exclude module: "xercesImpl"
+}
+
+sourceSets {
+    main {
+        java {
+        }
+    }
+    test {
+        java {
+        }
+        output.classesDir   = 'build/classes'
+    }
+}
+
+tasks.withType(Test) {
+    useTestNG() {
+
+        // Comando para correr solo una Suite:
+        //
+        //  gradle --info cleanTest test -Dtest.single=ClientesTC
+
+
+        //  Comando para "pisar" las variables de ambiente
+        //jvmArgs = ['-DResourceDir=src/test/resources/',
+        //           '-DOutputDirectory=outputTests',
+        //           '-DTeamCityCheckOutDirectory=./',
+        //           '-DdefaultExpressWait=4',
+        //           '-DdefaultSleep=600',
+        //           '-Dwebdriver.chrome.driver=chromedriver.exe'
+        //
+        //Use in teamcity. If is true then get chromedriver from user home
+        systemProperty "teamcity", System.getProperty("teamcity")
+        systemProperty "PrgmPage", System.getenv("PrgmPage")
+        systemProperty "OutputDirectory", System.getenv("OutputDirectory")
+
+
+        maxParallelForks = 1
+        testLogging {
+            showStandardStreams = true
+            // log results to "build/test-results" directory
+            exceptionFormat "full"
+            events "started", "passed", "skipped", "failed", "standardOut", "standardError"
+        }
+    }
+}
+
+//task volumeTest(group:Test,description:"A task to run a suite in several threads"){
+//    //  Comando para "pisar" las variables de ambiente
+//
+//    doFirst{
+//        cleanTest
+//    }
+//    doLast{
+//        jvmArgs = ['-DResourceDir=src/test/resources/',
+//                   //           '-DOutputDirectory=outputTests',
+//                   '-DTeamCityCheckOutDirectory=""',
+//                   '-DPrgmPage="VolumeTest']
+//        test
+//    }
+//}
+//
