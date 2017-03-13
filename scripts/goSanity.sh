@@ -76,8 +76,8 @@ then
 	echo "No pull from repository"|&tee ${OutLog}
 	echo " "|&tee ${OutLog}
 else
-	echo "git pull genesis-qa " |& tee ${OutLog}
-	echo "===================="  |& tee -a ${OutLog}
+	echo "git pull  " |& tee ${OutLog}
+	echo "=========="  |& tee -a ${OutLog}
 	git pull    |& tee -a ${OutLog}
 fi
 

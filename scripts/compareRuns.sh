@@ -6,39 +6,88 @@
 #
 #
 ########################################################
-Repository=${HOME}/work/TekQAOf/
-PrevRuns=$Repository/outputTests/CorridasAnteriores/
+Repository=${HOME}/FxStreet/goBqa/
+PrevRuns=${HOME}/Desktop/PreviousRun
+preserveResults="false"
+outputFile=$PrevRuns/DiffAnalisis.txt
 
-echo "Analisis de la corrida de las siguientes fechas:"> $PrevRuns/DiffAnalisis.txt
-echo -n "Corrida Actual :" >> $PrevRuns/DiffAnalisis.txt
-stat -c %y $PrevRuns/ActualErrors.txt>> $PrevRuns/DiffAnalisis.txt
+while [[ $# >0 ]]
+do
+key="$1"
 
-echo -n "Corrida Base   :" >> $PrevRuns/DiffAnalisis.txt
-stat -c %y $PrevRuns/PreviousErros.txt >> $PrevRuns/DiffAnalisis.txt
-echo "">>$PrevRuns/DiffAnalisis.txt
-echo "">>$PrevRuns/DiffAnalisis.txt
+case $key in
+	-o)
+	outputFile=$2
+	shift
+	;;
+
+	#-r|--results)
+	#preserveResults="true"
+	#;;
+
+	-h|--help)
+	echo ""
+	echo "Usage: compareRun.sh [-o outputFile]"
+	echo " "
+	echo "Compara los resultados de esta corrida con la corrida anterior"
+	echo "En rigor, con lo que se haya puesto como 'base' de comparacion."
+	echo "o con la ultima vez que se corrio este comando preservando los resultados"
+	echo "Argumentos:"
+	echo "========== "
+	echo "-o outputFile:  Envia los resultados al file indicado"
+	# echo "-r o --results:  Preserva el analisis para comparar con la proxima vez"
+	echo "-h o --help: muestra este mensaje."
+	echo ""
+	exit 0
+	;;
+	*)
+	# unknown option
+	echo "Opcion Invalida. Correr el comando con la opcion -h para obtener ayuda"
+	exit 0
+	;;
+
+esac
+shift # past argument or value
+done
 
 
-echo "Errores Corregidos">> $PrevRuns/DiffAnalisis.txt
-echo "=====================">> $PrevRuns/DiffAnalisis.txt
-comm -13 $PrevRuns/ActualErrors.txt $PrevRuns/PreviousErros.txt>> $PrevRuns/DiffAnalisis.txt
+echo "Analisis de las siguientes ejecuciones:">$outputFile
 
-echo "">> $PrevRuns/DiffAnalisis.txt
-echo "Errores que Permanecen">> $PrevRuns/DiffAnalisis.txt
-echo "=====================">> $PrevRuns/DiffAnalisis.txt
-comm -12 $PrevRuns/ActualErrors.txt $PrevRuns/PreviousErros.txt>> $PrevRuns/DiffAnalisis.txt
 
-echo "">> $PrevRuns/DiffAnalisis.txt
-echo "Errores Nuevos">> $PrevRuns/DiffAnalisis.txt
-echo "==============">> $PrevRuns/DiffAnalisis.txt
-comm -23 $PrevRuns/ActualErrors.txt $PrevRuns/PreviousErros.txt>> $PrevRuns/DiffAnalisis.txt
 
-echo "  FIN del Trabajo  ">> $PrevRuns/DiffAnalisis.txt
+echo -n "Ejecucion Actual :" >> $outputFile
+stat -c %z $PrevRuns/ActualErrors.txt>> $outputFile
+
+echo -n "Ejecucion contra la que se compara:" >> $outputFile
+stat -c %z $PrevRuns/PreviousErrors.txt >> $outputFile
+echo "">>$outputFile
+echo "">>$outputFile
+echo "Se detallan a continuacion que test fallaron, cuales se corrigieron ">>$outputFile
+echo "y cuales permanecen respecto de la ultima ejecucion de los tests">>$outputFile
+echo "">>$outputFile
+echo "">>$outputFile
+
+
+echo "Errores Corregidos">> $outputFile
+echo "=====================">> $outputFile
+comm -13 $PrevRuns/ActualErrors.txt $PrevRuns/PreviousErrors.txt>> $outputFile
+
+echo "">> $outputFile
+echo "Errores que Permanecen">> $outputFile
+echo "=====================">> $outputFile
+comm -12 $PrevRuns/ActualErrors.txt $PrevRuns/PreviousErrors.txt>> $outputFile
+
+echo "">> $outputFile
+echo "Errores Nuevos">> $outputFile
+echo "==============">> $outputFile
+comm -23 $PrevRuns/ActualErrors.txt $PrevRuns/PreviousErrors.txt>> $outputFile
+
+echo "">> $outputFile
+echo "FIN del Analisis  ">> $outputFile
 
 ###############################################
 #
-# Si anduviera el mail, se enviaria el archivo....
+# Se muestra el contendio
 #
 ###############################################
-cat $PrevRuns/DiffAnalisis.txt
-
+cat $outputFile
