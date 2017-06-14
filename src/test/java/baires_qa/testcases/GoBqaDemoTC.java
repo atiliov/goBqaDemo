@@ -12,7 +12,7 @@ import org.testng.annotations.Test;
  * El Nombre del programa lo toma del nombre de la clase
  *
  */
-public class FxStreetDemoTC extends BaseTestCases {
+public class GoBqaDemoTC extends BaseTestCases {
 
 
     @AfterSuite
@@ -21,7 +21,7 @@ public class FxStreetDemoTC extends BaseTestCases {
     }
 
     @Test(dataProvider="BaseTestCases")
-    public void testCatalog( String testcaseName,String testActive, String browser,String keyword,
+    public void testDemo( String testcaseName,String testActive, String browser,String keyword,
                               String objectName,String objectType,String value, String comment)
             throws Exception {
 
