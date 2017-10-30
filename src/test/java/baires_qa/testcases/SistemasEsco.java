@@ -12,7 +12,7 @@ import org.testng.annotations.Test;
  * El Nombre del programa lo toma del nombre de la clase
  *
  */
-public class SistemasSesco extends BaseTestCases {
+public class SistemasEsco extends BaseTestCases {
 
 
     @AfterSuite
