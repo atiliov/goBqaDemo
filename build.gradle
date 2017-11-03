@@ -51,7 +51,7 @@ dependencies {
     testCompile 'org.apache.httpcomponents:httpmime:4.3.6'
     testCompile 'org.apache.httpcomponents:httpasyncclient:4.0.2'
     testCompile group: 'org.json', name: 'json', version: '20140107'
-
+    testCompile 'com.opencsv:opencsv:4.0'
 
 }
 
