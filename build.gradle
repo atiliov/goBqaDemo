@@ -39,8 +39,9 @@ dependencies {
     testCompile 'io.appium:java-client:1.6.1'
 
     // Libraries local to the project
-    testCompile files('lib/seleniumutils-2.1.jar')
     testCompile files('FmwkLib/GoBqa.jar')
+    testCompile files('FmwkLib/ojdbc8.jar')
+    testCompile files('lib/seleniumutils-2.1.jar')
 
     // libraries to manage JSON integration
     testCompile 'com.googlecode.json-simple:json-simple:1.1'
@@ -51,7 +52,18 @@ dependencies {
     testCompile 'org.apache.httpcomponents:httpmime:4.3.6'
     testCompile 'org.apache.httpcomponents:httpasyncclient:4.0.2'
     testCompile group: 'org.json', name: 'json', version: '20140107'
+
+    // CSV Library
     testCompile 'com.opencsv:opencsv:4.0'
+    // JDBC de Oracle
+
+    // https://mvnrepository.com/artifact/com.oracle/ojdbc14
+    //testCompile group: 'com.oracle', name: 'ojdbc14', version: '10.2.0.2.0'
+
+    // https://mvnrepository.com/artifact/oracle/ojdbc6
+    //compile group: 'oracle', name: 'ojdbc6', version: '11.2.0.3'
+
+
 
 }
 
@@ -120,3 +132,5 @@ tasks.withType(Test) {
 //    }
 //}
 //
+
+
