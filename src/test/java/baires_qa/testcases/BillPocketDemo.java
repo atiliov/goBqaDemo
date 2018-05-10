@@ -21,7 +21,7 @@ public class BillPocketDemo extends BaseTestCases {
     }
 
     @Test(dataProvider="BaseTestCases")
-    public void testDemo( String testcaseName,String testActive, String browser,String keyword,
+public void testDemo( String testcaseName,String testActive, String browser,String keyword,
                               String objectName,String objectType,String value, String comment)
             throws Exception {
 
