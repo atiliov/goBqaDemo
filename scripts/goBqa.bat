@@ -4,7 +4,7 @@ REM
 REM Este bat lo que hace es ejecutar el sanity en entorno windows
 REM
 REM  USO:
-REM    goBqa.bat [-h] [-browser xxxx] [-browserVersion yy] [-os  ZZZ]
+REM    goBqa.bat [-h]
 REM
 REM Se puede modificar para que tambien se pueda elegir la suite a correr. Pero eso sera despues
 REM
@@ -15,16 +15,17 @@ REM **********************************************************************
 REM
 REM  RUNNING ENV.
 REM
-REM set GRADLE_HOME=c:\gradle-2.7
-REM set JAVA_HOME=c:\jdk1.8.0_111\
-REM set PATH=%GRADLE_HOME%\bin;%JAVA_HOME%\bin;%PATH%
+
+set installationDIR=C:\
+set GRADLE_HOME=%installationDIR%\gradle-4.5
+set JAVA_HOME=%installationDIR%\jdk1.8.0_162\
+set PATH=%GRADLE_HOME%\bin;%JAVA_HOME%\bin;%PATH%
 
 REM **********************************************************************
-
+REM
 REM             COMPLETAR CON LOS VALORES PARA LA CORRIDA SI SE CORRE CON BROWSER EN "REMOTE"
-
+REM
 REM **********************************************************************
-
 
 set goBqa_browser=Firefox
 set goBqa_browserVersion=51
@@ -52,10 +53,10 @@ REM
 REM Variables de Instalacion
 REM
 
-set installationDIR=C:\Users\bairesqa\Documents\FxStreet
+
 set PrgmPage=Sanity
 set OutputDirectory=outputTests\
-set logFile=%installationDir%\logfile.txt
+set logFile=%installationDir%\goBqaDemo\logfile.txt
 
 REM Ahora los argumentos para modificar la ejecucion
 REM Por defecto quedan las que usa el aplicativo (Chrome sobre linux)
@@ -65,22 +66,10 @@ REM Por defecto quedan las que usa el aplicativo (Chrome sobre linux)
 IF NOT "%1"=="" (
     if "%1"=="-h" (
         echo USO:
-        echo goBqa.bat [-h] [-browser xxxx] [-browserVersion yy] [-os  ZZZ]
+        echo goBqa.bat [-h]
         echo .
         goto fail
     )
-    IF "%1"=="-browser" (
-        SET goBqa_browser=%2
-        SHIFT
-    )
-    IF "%1"=="-browserVersion" (
-        SET goBqa_browserVersion=%2
-        SHIFT
-    )
-    IF "%1"=="-os" (
-            SET goBqa_platform=%2
-            SHIFT
-        )
     IF "%1"=="-skip" (
             GOTO :skip
         )
@@ -96,12 +85,12 @@ REM echo A punto de correr con estas variables:
 REM echo installationDIR=%installationDIR%
 REM echo PrgmPage=%PrgmPage%
 REM echo OutputDirectory=%OutputDirectory%
-REM echo logFile=%logFile%
-echo Ejecutando tests en SauceLabs...
+echo logFile=%logFile%
+REM echo Ejecutando tests en SauceLabs...
 
-cd %installationDir%
+cd %installationDir%\goBqaDemo
 rem gradle cleanTest test  >%logFile% 2>&1
-gradle cleanTest test --info
+gradle cleanTest test --info >%logFile% 2>&1
 echo "Tests Finalizados"
 
 REM
