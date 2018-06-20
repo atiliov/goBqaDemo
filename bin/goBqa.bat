@@ -21,12 +21,8 @@ set JAVA_HOME=%installationDir%\jdk1.8.0_162\
 set PATH=%GRADLE_HOME%\bin;%JAVA_HOME%\bin;%PATH%
 
 REM **********************************************************************
-
-REM             COMPLETAR CON LOS VALORES PARA LA CORRIDA SI SE CORRE CON BROWSER EN "REMOTE"
-
+REM             COMPLETAR CON LOS VALORES PARA LA CORRIDA SOLO SI SE CORRE CON BROWSER EN "REMOTE"
 REM **********************************************************************
-
-
 set goBqa_browser=Firefox
 set goBqa_browserVersion=51
 set goBqa_platform=Windows 7
@@ -66,44 +62,41 @@ REM Por defecto quedan las que usa el aplicativo (Chrome sobre linux)
 IF NOT "%1"=="" (
     if "%1"=="-h" (
         echo USO:
-        echo goBqa.bat [-h] [-p page]
-        echo .
-        echo -h:  Este mensaje de ayuda
-        echo -p page: El nombre de la pagina dentro del excel
+        echo "goBqa.bat [-h] [-p page] [-env]"
+        echo ""
+        echo "-h:  Este mensaje de ayuda. Si necesita documentacion completa, enviar un mail a info@bairesqa.com solicitandola"
+        echo "     con gusto se la enviamos."
+        echo "-p page: El nombre de la pagina dentro del excel a ejecutar, valor por defecto:'Sanity'"
+        echo "-env: muestra como quedan algunas de las variables de entorno al momento de ejecutarse"
         goto fail
     )
-    IF "%1"=="-browser" (
-        SET goBqa_browser=%2
+    IF "%1"=="-page" (
+        SET PrgmPage=%2
         SHIFT
     )
-    IF "%1"=="-browserVersion" (
-        SET goBqa_browserVersion=%2
-        SHIFT
-    )
-    IF "%1"=="-os" (
-            SET goBqa_platform=%2
-            SHIFT
+    IF "%1"=="env" (
+            echo ""
+            echo installationDIR=%installationDIR%
+            echo GRADLE_HOME=%GRADLE_HOME%
+            echo JAVA_HOME=%JAVA_HOME%
+            echo PATH=%PATH%
+            echo PrgmPage=%PrgmPage%
+            echo logFile=%logFile%
+            echo OutputDirectory es siempre relativa al installationDir, se muestra absoluto
+            echo OutputDirectory=%OutputDirectory%
+
         )
-    IF "%1"=="-skip" (
-            GOTO :skip
-        )
+
     SHIFT
     GOTO :loop
 )
 
 REM ###########################################################################
-REM Perform TEST  Mando output al tacho
+REM Perform TEST  Mando output al logfile
 REM ##########################################################################
 
-REM echo A punto de correr con estas variables:
-REM echo installationDIR=%installationDIR%
-REM echo PrgmPage=%PrgmPage%
-REM echo OutputDirectory=%OutputDirectory%
-REM echo logFile=%logFile%
-REM echo Ejecutando tests en SauceLabs...
-
 cd %installationDir%\goBqaDemo
-rem gradle cleanTest test  >%logFile% 2>&1
+
 gradle cleanTest test --info >%logFile% 2>&1
 echo "Tests Finalizados"
 
