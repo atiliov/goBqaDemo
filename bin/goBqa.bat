@@ -1,10 +1,10 @@
-REM @echo off
+@echo off
 REM **********************************************************************
 REM
 REM Este bat lo que hace es ejecutar el sanity en entorno windows
 REM
 REM  USO:
-REM    goBqa.bat [-h]
+REM    goBqa.bat [-h] [-browser xxxx] [-browserVersion yy] [-os  ZZZ]
 REM
 REM Se puede modificar para que tambien se pueda elegir la suite a correr. Pero eso sera despues
 REM
@@ -15,17 +15,17 @@ REM **********************************************************************
 REM
 REM  RUNNING ENV.
 REM
-
-set installationDIR=C:\
-set GRADLE_HOME=%installationDIR%\gradle-4.5
-set JAVA_HOME=%installationDIR%\jdk1.8.0_162\
+set installationDIR=%systemdrive%%homepath%\goBqa\
+set GRADLE_HOME=%installationDir%\gradle-4.5
+set JAVA_HOME=%installationDir%\jdk1.8.0_162\
 set PATH=%GRADLE_HOME%\bin;%JAVA_HOME%\bin;%PATH%
 
 REM **********************************************************************
-REM
+
 REM             COMPLETAR CON LOS VALORES PARA LA CORRIDA SI SE CORRE CON BROWSER EN "REMOTE"
-REM
+
 REM **********************************************************************
+
 
 set goBqa_browser=Firefox
 set goBqa_browserVersion=51
@@ -56,7 +56,7 @@ REM
 
 set PrgmPage=Sanity
 set OutputDirectory=outputTests\
-set logFile=%installationDir%\goBqaDemo\logfile.txt
+set logFile=%installationDir%\logfile.txt
 
 REM Ahora los argumentos para modificar la ejecucion
 REM Por defecto quedan las que usa el aplicativo (Chrome sobre linux)
@@ -66,10 +66,24 @@ REM Por defecto quedan las que usa el aplicativo (Chrome sobre linux)
 IF NOT "%1"=="" (
     if "%1"=="-h" (
         echo USO:
-        echo goBqa.bat [-h]
+        echo goBqa.bat [-h] [-p page]
         echo .
+        echo -h:  Este mensaje de ayuda
+        echo -p page: El nombre de la pagina dentro del excel
         goto fail
     )
+    IF "%1"=="-browser" (
+        SET goBqa_browser=%2
+        SHIFT
+    )
+    IF "%1"=="-browserVersion" (
+        SET goBqa_browserVersion=%2
+        SHIFT
+    )
+    IF "%1"=="-os" (
+            SET goBqa_platform=%2
+            SHIFT
+        )
     IF "%1"=="-skip" (
             GOTO :skip
         )
@@ -85,7 +99,7 @@ REM echo A punto de correr con estas variables:
 REM echo installationDIR=%installationDIR%
 REM echo PrgmPage=%PrgmPage%
 REM echo OutputDirectory=%OutputDirectory%
-echo logFile=%logFile%
+REM echo logFile=%logFile%
 REM echo Ejecutando tests en SauceLabs...
 
 cd %installationDir%\goBqaDemo
@@ -97,7 +111,7 @@ REM
 REM COMPRIMO EL DIRECTORIO DE RESULTADOS A SER ENVIADOS ANTES DE SU ANALISIS
 REM Pues El analisis los preserva
 REM
-jar -cMf Enviar\ResultadosTest.zip outputTests
+REM jar -cMf Enviar\ResultadosTest.zip outputTests
 
 
 REM
@@ -105,17 +119,17 @@ REM El sigiente programa analiza la ejecucion y preserva los datos para un futur
 REM Preserva los datos en el directorio "PreviousRun\fecha_de_ejecucion"
 REM El archivo "PreviousRun\DiffAnalisis.txt" tiene el analisis
 
-"C:\Program Files\Git\bin\bash.exe" scripts/AnalizeDif.sh 
+REM "C:\Program Files\Git\bin\bash.exe" scripts/AnalizeDif.sh
 
 REM
-REM  Se envia mail con el resultado. 
+REM  Se envia mail con el resultado.
 REM
 REM  ATENCION: Al menos durante una primer etapa mantener el envio de una copia a "atilio@bairesqa.com" para revisarlos
 REM            hasta estar tranquilos que los test corren en forma estable
 REM
-blat %HOMEPATH%\Desktop\PreviousRun\DiffAnalisis.txt -to atilio@bairesqa.com -server smtp.mandrillapp.com -port 587 -f noreply@fxstreet.com -subject "Test Results - Extraer attach para detalles" -u "FOREXSTREET S.L." -pw nXuOcX9XdOj5RduHLgVQ5A -attach "Enviar\ResultadosTest.zip"
+REM blat %HOMEPATH%\Desktop\PreviousRun\DiffAnalisis.txt -to atilio@bairesqa.com -server smtp.mandrillapp.com -port 587 -f noreply@fxstreet.com -subject "Test Results - Extraer attach para detalles" -u "FOREXSTREET S.L." -pw nXuOcX9XdOj5RduHLgVQ5A -attach "Enviar\ResultadosTest.zip"
 
-pause
+REM pause
 
 :skip
 exit /b 0
