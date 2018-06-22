@@ -11,7 +11,6 @@ REM
 REM
 REM **********************************************************************
 
-
 REM
 REM  RUNNING ENV.
 REM
@@ -22,7 +21,7 @@ echo "No se encuentra el archivo 'instalacion.ini' con el directorio donde se en
 goto fail
 :setear
 
-set installationDIR=<instalacion.ini
+set /p installationDIR=<instalacion.ini
 
 set GRADLE_HOME=%installationDir%\gradle-4.5
 set JAVA_HOME=%installationDir%\jdk1.8.0_162\
@@ -103,6 +102,10 @@ IF NOT "%1"=="" (
 REM ###########################################################################
 REM Perform TEST  Mando output al logfile
 REM ##########################################################################
+
+@echo "Ejecutando los test...."
+@echo "La primera vez tarda en arrancar pues baja algunas librerias. Se puede ver el log de ejecucion en %logfile%"
+@echo "...."
 
 cd %installationDir%\goBqaDemo
 
