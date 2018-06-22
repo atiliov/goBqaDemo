@@ -15,7 +15,15 @@ REM **********************************************************************
 REM
 REM  RUNNING ENV.
 REM
-set installationDIR=%systemdrive%%homepath%\goBqa\
+if not exist instalacion.ini goto error1
+if  exist instalacion.ini goto setear
+:error1
+echo "No se encuentra el archivo 'instalacion.ini' con el directorio donde se encuentra instalado el producto"
+goto fail
+:setear
+
+set installationDIR=<instalacion.ini
+
 set GRADLE_HOME=%installationDir%\gradle-4.5
 set JAVA_HOME=%installationDir%\jdk1.8.0_162\
 set PATH=%GRADLE_HOME%\bin;%JAVA_HOME%\bin;%PATH%
@@ -42,8 +50,9 @@ echo Editar el bat "goBqa.bat" y ajustar esas variables y por las dudas revisar 
 echo .
 
 goto fail
-
 :continue
+
+
 
 REM
 REM Variables de Instalacion
