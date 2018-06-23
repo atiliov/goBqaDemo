@@ -3,4 +3,4 @@ REM
 REM  Este post installation recibe como argumento el directorio de instalacion
 
 
-echo %1 > goBqaDemo\bin\instalacion.ini
+echo %1> goBqaDemo\bin\instalacion.ini
