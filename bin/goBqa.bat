@@ -21,10 +21,14 @@ echo "No se encuentra el archivo 'instalacion.ini' con el directorio donde se en
 goto fail
 :setear
 
+REM El archivo instalacion.ini se setea durante la instalacion con el directorio raiz
+REM donde esta instalado el producto.
 set /p installationDIR=<instalacion.ini
 
-set GRADLE_HOME=%installationDir%\gradle-4.5
-set JAVA_HOME=%installationDir%\jdk1.8.0_162\
+REM Si Gradle_HOME o java_home no estan definidas, se asume que se instalo con el el paquete java y/o gradle
+if "%GRADLE_HOME%"=="" set GRADLE_HOME=%installationDir%\gradle-4.5
+if "%JAVA_HOME%"=="" set JAVA_HOME=%installationDir%\jdk1.8.0_162\
+
 set PATH=%GRADLE_HOME%\bin;%JAVA_HOME%\bin;%PATH%
 
 REM **********************************************************************
@@ -103,9 +107,10 @@ REM ###########################################################################
 REM Perform TEST  Mando output al logfile
 REM ##########################################################################
 
-@echo "Ejecutando los test...."
-@echo "La primera vez tarda en arrancar pues baja algunas librerias. Se puede ver el log de ejecucion en %logfile%"
-@echo "...."
+@echo Ejecutando los test....
+@echo La primera vez tarda en arrancar pues baja algunas librerias.
+@echo Se puede ver el log de ejecucion en %logfile%
+@echo ....
 
 cd %installationDir%\goBqaDemo
 
