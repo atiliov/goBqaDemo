@@ -74,31 +74,17 @@ REM Por defecto quedan las que usa el aplicativo (Chrome sobre linux)
 IF NOT "%1"=="" (
     if "%1"=="-h" (
         echo USO:
-        echo "goBqa.bat [-h] [-p page] [-env]"
+        echo "goBqa.bat [-h] [-p page]"
         echo ""
         echo "-h:  Este mensaje de ayuda. Si necesita documentacion completa, enviar un mail a info@bairesqa.com solicitandola"
         echo "     con gusto se la enviamos."
         echo "-p page: El nombre de la pagina dentro del excel a ejecutar, valor por defecto:'Sanity'"
-        echo "-env: muestra como quedan algunas de las variables de entorno al momento de ejecutarse"
         goto fail
     )
     IF "%1"=="-page" (
         SET PrgmPage=%2
         SHIFT
     )
-    IF "%1"=="env" (
-            echo ""
-            echo installationDIR=%installationDIR%
-            echo GRADLE_HOME=%GRADLE_HOME%
-            echo JAVA_HOME=%JAVA_HOME%
-            echo PATH=%PATH%
-            echo PrgmPage=%PrgmPage%
-            echo logFile=%logFile%
-            echo OutputDirectory es siempre relativa al installationDir, se muestra absoluto
-            echo OutputDirectory=%OutputDirectory%
-
-        )
-
     SHIFT
     GOTO :loop
 )
@@ -108,8 +94,9 @@ REM Perform TEST  Mando output al logfile
 REM ##########################################################################
 
 @echo Ejecutando los test....
-@echo La primera vez tarda en arrancar pues baja algunas librerias.
+@echo La primera vez tarda en arrancar pues baja algunas librerias. Agradecemos su paciencia.
 @echo Se puede ver el log de ejecucion en %logfile%
+@echo Consulte a info@bairesqa.com por soporte o fuerza de programacion de pruebas en caso de querer tercerizar la automatizacion.
 @echo ....
 
 cd %installationDir%\goBqaDemo
