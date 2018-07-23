@@ -26,6 +26,8 @@ REM donde esta instalado el producto.
 set /p installationDIR=<instalacion.ini
 
 REM Si Gradle_HOME o java_home no estan definidas, se asume que se instalo con el el paquete java y/o gradle
+REM ATENCION: Esto puede fallar si "%installationDir%" tienen parentesis en alguno de los nombres, 
+REM           como por ejemplo "....\system (32)\..."
 if "%GRADLE_HOME%"=="" set GRADLE_HOME=%installationDir%\gradle-4.5
 if "%JAVA_HOME%"=="" set JAVA_HOME=%installationDir%\jdk1.8.0_162\
 
@@ -121,10 +123,10 @@ REM "C:\Program Files\Git\bin\bash.exe" scripts/AnalizeDif.sh
 REM
 REM  Se envia mail con el resultado.
 REM
-REM  ATENCION: Al menos durante una primer etapa mantener el envio de una copia a "atilio@bairesqa.com" para revisarlos
+REM  ATENCION: Al menos durante una primer etapa mantener el envio de una copia para revisarlos
 REM            hasta estar tranquilos que los test corren en forma estable
 REM
-REM blat %HOMEPATH%\Desktop\PreviousRun\DiffAnalisis.txt -to atilio@bairesqa.com -server smtp.mandrillapp.com -port 587 -f noreply@fxstreet.com -subject "Test Results - Extraer attach para detalles" -u "FOREXSTREET S.L." -pw nXuOcX9XdOj5RduHLgVQ5A -attach "Enviar\ResultadosTest.zip"
+REM blat %HOMEPATH%\Desktop\PreviousRun\DiffAnalisis.txt -to soporte@bairesqa.com -server smtp.mandrillapp.com -port 587 -f noreply@fxstreet.com -subject "Test Results - Extraer attach para detalles" -u "FOREXSTREET S.L." -pw nXuOcX9XdOj5RduHLgVQ5A -attach "Enviar\ResultadosTest.zip"
 
 REM pause
 
@@ -133,4 +135,7 @@ exit /b 0
 
 
 :fail
+echo "La ejecucion termino con errores."
+echo "Presione enter para terminar"
+pause
 exit /b 1
